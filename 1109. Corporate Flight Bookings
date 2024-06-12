@@ -1,0 +1,43 @@
+class Solution {
+    public int[] corpFlightBookings(int[][] bookings, int n) {
+        // Initialize the seats array with one extra element
+        int[] seats = new int[n + 1]; 
+
+        // Apply the difference array technique
+        for (int[] booking : bookings) {
+            int start = booking[0] - 1; // Convert to 0-based index
+            int end = booking[1];       // We will decrement seats[end] directly
+            int seatsToAdd = booking[2];
+            
+            seats[start] += seatsToAdd;
+            if (end < n) {
+                seats[end] -= seatsToAdd;
+            }
+        }
+
+        // Calculate the final number of seats for each flight
+        int[] result = new int[n];
+        result[0] = seats[0];
+        for (int i = 1; i < n; i++) {
+            result[i] = result[i - 1] + seats[i];
+        }
+
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        // Example usage:
+        Solution sol = new Solution();
+        int[][] bookings = {
+            {1, 2, 10},
+            {2, 3, 20},
+            {2, 5, 25}
+        };
+        int n = 5;
+        int[] result = sol.corpFlightBookings(bookings, n);
+        for (int seats : result) {
+            System.out.print(seats + " ");
+        }
+        // Output should be: [10, 55, 45, 25, 25]
+    }
+}
